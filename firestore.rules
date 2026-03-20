@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == "radhetax84@gmail.com";
+    }
+
+    function isValidBooking(bookingData) {
+      return bookingData.name is string && bookingData.phone is string;
+    }
+
+    match /bookings/{bookingId} {
+      allow read: if true;
+      allow create: if isValidBooking(request.resource.data);
+      allow update, delete: if isAdmin();
+    }
+
+    match /messages/{messageId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if isAdmin();
+    }
+
+    match /updates/{updateId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

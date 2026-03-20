@@ -1,0 +1,51 @@
+{
+  "entities": {
+    "Booking": {
+      "title": "Booking",
+      "description": "A service booking request from a customer.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Customer full name" },
+        "phone": { "type": "string", "description": "Customer phone number" },
+        "service": { "type": "string", "description": "Selected service title" },
+        "message": { "type": "string", "description": "Optional message" },
+        "fileUrl": { "type": "string", "description": "URL of uploaded document" },
+        "fileName": { "type": "string", "description": "Name of uploaded document" },
+        "status": { "type": "string", "enum": ["Pending", "Completed"] },
+        "paymentStatus": { "type": "string", "enum": ["Unpaid", "Paid"] },
+        "createdAt": { "type": "number", "description": "Timestamp of booking" }
+      },
+      "required": ["name", "phone", "service", "status", "paymentStatus", "createdAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A chat message between customer and admin.",
+      "type": "object",
+      "properties": {
+        "bookingId": { "type": "string", "description": "ID of the related booking" },
+        "sender": { "type": "string", "enum": ["User", "Admin"] },
+        "text": { "type": "string", "description": "Message text" },
+        "fileUrl": { "type": "string", "description": "Optional file URL" },
+        "fileName": { "type": "string", "description": "Optional file name" },
+        "createdAt": { "type": "number", "description": "Timestamp of message" }
+      },
+      "required": ["bookingId", "sender", "text", "createdAt"]
+    },
+    "Update": {
+      "title": "Update",
+      "description": "A news or deadline update.",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["date", "title", "description"]
+    }
+  },
+  "firestore": {
+    "bookings": { "schema": "Booking", "description": "Collection of all service bookings" },
+    "messages": { "schema": "Message", "description": "Collection of all chat messages" },
+    "updates": { "schema": "Update", "description": "Collection of latest news and updates" }
+  }
+}
